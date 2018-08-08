@@ -4,7 +4,7 @@ import { getPollingLocation } from './src/crawler';
 const application = express();
 const port = 3000;
 
-application.use('/:address', getPollingLocation);
+application.get('*', getPollingLocation);
 
 application.listen(port, error => {
   if (error) {

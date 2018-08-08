@@ -3,8 +3,9 @@ import express from 'express';
 const application = express();
 
 export const getPollingLocation = async (request, response) => {
-  const { address } = request.params;
+  const { address } = request.query;
   console.log(address);
+  console.log('Hello');
 
   try {
     return response.status(200).json({});
@@ -14,7 +15,5 @@ export const getPollingLocation = async (request, response) => {
   }
 };
 
-application.get('/:address', getPollingLocation);
+application.get('*', getPollingLocation);
 exports.getPollingLocation = application;
-
-
