@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "allowSyntheticDefaultImports": true,
+    "checkJs": false,
+    "jsx": "react"
+  },
+  "exclude": ["node_modules"]
+}
