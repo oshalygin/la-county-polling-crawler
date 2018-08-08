@@ -1,5 +1,8 @@
 {
   "name": "la-county-polling-crawler",
+  "functionName": "pollingCrawler",
+  "timeout": 240,
+  "memory": "2048MB",
   "version": "1.0.0",
   "description": "Simple LA County Web Crawling Application Used as a Backend for Mobile Clients",
   "scripts": {
