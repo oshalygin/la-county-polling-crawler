@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Application Logo" src="docs/crawler.jpg" height="150" width="150" />
+  <img alt="Application Logo" src="docs/crawler.jpg" height="150" width="300" />
   <h3 align="center">LA County Polling Crawler</h3>
   <p align="center">Simple LA County Web Crawling Application Used as a Backend for Mobile Clients</p>
 
