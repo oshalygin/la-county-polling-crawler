@@ -1,6 +1,5 @@
 FROM node:10.2.0
 
-
 LABEL maintainer="oshalygin@gmail.com"
 LABEL description="La Voter App"
 
@@ -12,5 +11,6 @@ WORKDIR /wwwroot
 EXPOSE 8080
 
 RUN npm install
+RUN npm run build
 
-ENTRYPOINT  ["npm ", "run", "start"]
+ENTRYPOINT  ["npm ", "run", "production"]
