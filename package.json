@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Simple LA County Web Crawling Application Used as a Backend for Mobile Clients",
   "scripts": {
-    "start": "babel-watch ./src/server.js",
+    "start": "node app.js",
     "production": "NODE_ENV=production node ./dist/server.js",
     "lint": "npm-run-all --parallel eslint",
     "eslint": "eslint \"src/**\" --color",

@@ -1,6 +1,6 @@
-import express from 'express';
-import cheerio from 'cheerio';
-import puppeteer from 'puppeteer';
+const express = require('express');
+const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
 
 const port = process.env.PORT || 8080; // eslint-disable-line no-process-env
 
@@ -84,7 +84,7 @@ async function retrievePollingLocation(
   };
 }
 
-export const getPollingLocation = async (request, response) => {
+const getPollingLocation = async (request, response) => {
   const { lastName, birthDate, houseNumber, zipCode } = request.query;
   if (!lastName) {
     return response
@@ -134,4 +134,4 @@ application.listen(port, error => {
   console.info(`Serving API from http://localhost:${port}`);
 });
 
-export default application;
+module.exports = application;
