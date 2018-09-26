@@ -1,3 +1,4 @@
+/* eslint-disable id-length */
 const express = require('express');
 const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
@@ -13,6 +14,55 @@ const BIRTH_DATE_ID_FIELD = '#ctl00_pg_content_C001_txtBirthdate';
 const HOUSE_NUMBER_ID_FIELD = '#ctl00_pg_content_C001_txtHouseNumber';
 const ZIP_CODE_ID_FIELD = '#ctl00_pg_content_C001_txtZipCode';
 const SUBMIT_ID_FIELD = '#ctl00_pg_content_C001_btnPollLocatorSubmit';
+
+const STATE_PLANE_URL = 'http://www.earthpoint.us/StatePlane.aspx';
+
+const X_ID_FIELD = '#ContentPlaceHolder1_X';
+const Y_ID_FIELD = '#ContentPlaceHolder1_Y';
+const STATE_PLANE_ZONE_ID_FIELD = '#ContentPlaceHolder1_dlZone';
+const XY_UNIT_MEASURE_ID_FIELD = '#ContentPlaceHolder1_rbUnitOfMeasure_1';
+const CALCULATE_LAT_LONG_SUBMIT_ID_FIELD =
+  '#ContentPlaceHolder1_btnXYCalc_Button1';
+
+const LAT_LONG_TEXT_LOCATION =
+  '#ContentPlaceHolder1_UpdatePanel4 > table > tbody > tr:nth-child(4) > td:nth-child(2)';
+
+const STATE_PLANE_ZONE = '0405';
+
+async function retrieveLatLong(addressAnchorLink) {
+  const splitAddress = addressAnchorLink.split('=');
+  const x = splitAddress[1].replace('&y', '');
+  const y = splitAddress[2].replace('&st', '');
+
+  const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+  const page = await browser.newPage();
+
+  await page.goto(STATE_PLANE_URL);
+
+  await page.select(STATE_PLANE_ZONE_ID_FIELD, STATE_PLANE_ZONE);
+  await page.click(XY_UNIT_MEASURE_ID_FIELD);
+
+  await page.type(X_ID_FIELD, x);
+  await page.type(Y_ID_FIELD, y);
+
+  await page.click(CALCULATE_LAT_LONG_SUBMIT_ID_FIELD);
+  await page.waitForSelector(LAT_LONG_TEXT_LOCATION);
+
+  // Parse the document
+  const document = await page.evaluate(() => document.body.innerHTML);
+  const $ = cheerio.load(document); // eslint-disable-line id-length
+
+  const latLongString = $(LAT_LONG_TEXT_LOCATION).text();
+
+  const cleansedLatLongString = latLongString.split('°').join('');
+  const lat = cleansedLatLongString.split(',')[0];
+  const lng = cleansedLatLongString.split(',')[1].trim();
+
+  return {
+    lat,
+    lng,
+  };
+}
 
 async function retrievePollingLocation(
   lastName,
@@ -76,6 +126,7 @@ async function retrievePollingLocation(
   const locationZipCode = locationAddressCityLine.split(',')[1].split(' ')[2];
 
   return {
+    addressAnchorLink,
     locationOne: addressLocationOne,
     locationTwo: addressLocationTwo,
     street: locationStreet,
@@ -123,7 +174,14 @@ const getPollingLocation = async (request, response) => {
       return response.status(400).send('No Results Found');
     }
 
-    return response.status(200).json(pollingLocation);
+    const location = await retrieveLatLong(pollingLocation.addressAnchorLink);
+
+    const address = {
+      ...pollingLocation,
+      location,
+    };
+
+    return response.status(200).json(address);
   } catch (error) {
     console.error(error);
     return response.status(400).send('Bad Request');
