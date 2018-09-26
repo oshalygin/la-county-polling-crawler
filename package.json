@@ -1,6 +1,6 @@
 {
   "name": "la-county-polling-crawler",
-  "functionName": "pollingCrawler",
+  "functionName": "getPollingLocation",
   "timeout": 240,
   "memory": "2048MB",
   "version": "1.0.0",
