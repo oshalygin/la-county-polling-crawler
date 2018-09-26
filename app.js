@@ -70,7 +70,7 @@ async function retrievePollingLocation(
     .split('_')
     .join(' ');
 
-  const locationCity = locationAddressCityLine.split(',')[0];
+  const locationCity = locationAddressCityLine.split(',')[0].trim();
   const locationState = locationAddressCityLine.split(',')[1].split(' ')[1];
   const locationZipCode = locationAddressCityLine.split(',')[1].split(' ')[2];
 
