@@ -1,8 +1,5 @@
-import express from 'express';
 import cheerio from 'cheerio';
 import puppeteer from 'puppeteer';
-
-const application = express();
 
 const BASE_URL = 'https://www.lavote.net/Locator';
 
@@ -18,7 +15,7 @@ async function retrievePollingLocation(
   houseNumber,
   zipCode,
 ) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({args: ['--no-sandbox']});
   const page = await browser.newPage();
 
   // Retrieve the page
@@ -82,7 +79,7 @@ async function retrievePollingLocation(
   };
 }
 
-export const getPollingLocation = async (request, response) => {
+export async function crawler(request, response) {
   const { lastName, birthDate, houseNumber, zipCode } = request.query;
   if (!lastName) {
     return response
@@ -121,7 +118,4 @@ export const getPollingLocation = async (request, response) => {
     console.error(error);
     return response.status(400).send('Bad Request');
   }
-};
-
-application.get('*', getPollingLocation);
-exports.crawler = application;
+}
