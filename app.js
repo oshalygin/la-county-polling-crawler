@@ -41,12 +41,13 @@ async function retrievePollingLocation(
 
   const addressAnchorLink = $("a[href*='locatormap']").attr('href');
 
-  console.log(addressAnchorLink);
+  if (!addressAnchorLink) {
+    return null;
+  }
 
   // Parse the location URL
   const addressSchema = addressAnchorLink.split('&');
   const addressLocationOne = addressSchema
-
     .find(schema => schema.includes('pl1'))
     .split('=')[1]
     .split('_')
@@ -117,6 +118,10 @@ const getPollingLocation = async (request, response) => {
       houseNumber,
       zipCode,
     );
+
+    if (!pollingLocation) {
+      return response.status(400).send('No Results Found');
+    }
 
     return response.status(200).json(pollingLocation);
   } catch (error) {
