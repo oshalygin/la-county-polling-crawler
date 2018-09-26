@@ -1,4 +1,4 @@
-FROM node:10.2.0
+FROM node:10.11
 
 LABEL maintainer="oshalygin@gmail.com"
 LABEL description="La Voter App"
@@ -13,4 +13,4 @@ EXPOSE 8080
 RUN npm install
 RUN npm run build
 
-ENTRYPOINT  ["npm ", "run", "production"]
+ENTRYPOINT ["npm", "run", "production"]
