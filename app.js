@@ -59,8 +59,8 @@ async function retrieveLatLong(addressAnchorLink) {
   const lng = cleansedLatLongString.split(',')[1].trim();
 
   return {
-    lat,
-    lng,
+    lat: Number(lat),
+    lng: Number(lng),
   };
 }
 
@@ -125,8 +125,11 @@ async function retrievePollingLocation(
   const locationState = locationAddressCityLine.split(',')[1].split(' ')[1];
   const locationZipCode = locationAddressCityLine.split(',')[1].split(' ')[2];
 
+  const hoursOfOperation = $('.colorMaroon.textBold.fs').text();
+
   return {
     addressAnchorLink,
+    hoursOfOperation,
     locationOne: addressLocationOne,
     locationTwo: addressLocationTwo,
     street: locationStreet,
