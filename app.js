@@ -127,8 +127,18 @@ async function retrievePollingLocation(
 
   const hoursOfOperation = $('.colorMaroon.textBold.fs').text();
 
+  const electionName = $('.election_title_text.fs > h3 > span').text();
+
+  const electionDateString = $(
+    '#ctl00_pg_content_C001_divResultsPollingPlace > div > div.election_title.fs > div',
+  ).text();
+
+  const electionDate = electionDateString.replace(' ', '').split(' - ')[1];
+
   return {
     addressAnchorLink,
+    electionName,
+    electionDate,
     hoursOfOperation,
     locationOne: addressLocationOne,
     locationTwo: addressLocationTwo,
