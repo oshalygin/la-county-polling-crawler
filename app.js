@@ -2,6 +2,8 @@
 const express = require('express');
 const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
+const db = require('./db.js');
+const userDAL = require('./userDAL');
 
 const port = process.env.PORT || 8080; // eslint-disable-line no-process-env
 
@@ -194,6 +196,16 @@ const getPollingLocation = async (request, response) => {
       location,
     };
 
+    if (address.addressAnchorLink) {
+      await userDAL.findOneAndUpdate({
+        lastName,
+        birthDate,
+        houseNumber,
+        userZipCode: zipCode,
+        ...address,
+      });
+    }
+
     return response.status(200).json(address);
   } catch (error) {
     console.error(error);
@@ -202,6 +214,10 @@ const getPollingLocation = async (request, response) => {
 };
 
 application.get('*', getPollingLocation);
+
+db.connect()
+  .then(nativeConnection => db.connectedOutput(nativeConnection))
+  .catch(error => console.log(error));
 
 application.listen(port, error => {
   if (error) {
