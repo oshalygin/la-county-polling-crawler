@@ -135,7 +135,7 @@ async function retrievePollingLocation(
     '#ctl00_pg_content_C001_divResultsPollingPlace > div > div.election_title.fs > div',
   ).text();
 
-  const electionDate = electionDateString.replace(' ', '').split(' - ')[1];
+  const electionDate = electionDateString.replace(' ', '').split('- ')[1];
 
   return {
     addressAnchorLink,
