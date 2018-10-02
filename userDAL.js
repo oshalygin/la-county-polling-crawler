@@ -1,5 +1,12 @@
 const User = require('./userModel');
 
+async function find(query) {
+  const { lastName, birthDate, houseNumber } = query;
+
+  const user = await User.findOne({ lastName, birthDate, houseNumber });
+  return user;
+}
+
 async function save(model) {
   const user = new User({
     ...model,
@@ -36,6 +43,7 @@ async function findOneAndUpdate(model) {
 
 const userDAL = {
   save,
+  find,
   findOneAndUpdate,
 };
 

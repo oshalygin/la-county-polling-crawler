@@ -178,6 +178,12 @@ const getPollingLocation = async (request, response) => {
   }
 
   try {
+    const user = await userDAL.find({ lastName, birthDate, houseNumber });
+
+    if (user) {
+      return response.status(200).json(user);
+    }
+
     const pollingLocation = await retrievePollingLocation(
       lastName,
       birthDate,
