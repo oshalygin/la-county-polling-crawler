@@ -178,9 +178,17 @@ const getPollingLocation = async (request, response) => {
   }
 
   try {
-    const user = await userDAL.find({ lastName, birthDate, houseNumber });
+    const user = await userDAL.find({
+      lastName: lastName.toLowerCase(),
+      birthDate,
+      houseNumber,
+    });
 
-    if (user) {
+    const electionDate = new Date(user.electionDate);
+    const electionDatePassed =
+      !electionDate || new Date().valueOf() > electionDate.valueOf();
+
+    if (user.electionDate && !electionDatePassed) {
       return response.status(200).json(user);
     }
 
@@ -192,6 +200,13 @@ const getPollingLocation = async (request, response) => {
     );
 
     if (!pollingLocation) {
+      await userDAL.findOneAndUpdate({
+        lastName: lastName.toLowerCase(),
+        birthDate,
+        houseNumber,
+        userZipCode: zipCode,
+      });
+
       return response.status(404).send('No Results Found');
     }
 
@@ -204,7 +219,7 @@ const getPollingLocation = async (request, response) => {
 
     if (address.addressAnchorLink || !user) {
       await userDAL.findOneAndUpdate({
-        lastName,
+        lastName: lastName.toLowerCase(),
         birthDate,
         houseNumber,
         userZipCode: zipCode,
