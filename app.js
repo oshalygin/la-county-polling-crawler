@@ -202,7 +202,7 @@ const getPollingLocation = async (request, response) => {
       location,
     };
 
-    if (address.addressAnchorLink) {
+    if (address.addressAnchorLink || !user) {
       await userDAL.findOneAndUpdate({
         lastName,
         birthDate,
