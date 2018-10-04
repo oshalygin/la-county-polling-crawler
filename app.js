@@ -184,12 +184,14 @@ const getPollingLocation = async (request, response) => {
       houseNumber,
     });
 
-    const electionDate = new Date(user.electionDate);
-    const electionDatePassed =
-      !electionDate || new Date().valueOf() > electionDate.valueOf();
+    if (user) {
+      const electionDate = new Date(user.electionDate);
+      const electionDatePassed =
+        !electionDate || new Date().valueOf() > electionDate.valueOf();
 
-    if (user.electionDate && !electionDatePassed) {
-      return response.status(200).json(user);
+      if (user.electionDate && !electionDatePassed) {
+        return response.status(200).json(user);
+      }
     }
 
     const pollingLocation = await retrievePollingLocation(
