@@ -192,7 +192,7 @@ const getPollingLocation = async (request, response) => {
     );
 
     if (!pollingLocation) {
-      return response.status(400).send('No Results Found');
+      return response.status(404).send('No Results Found');
     }
 
     const location = await retrieveLatLong(pollingLocation.addressAnchorLink);
